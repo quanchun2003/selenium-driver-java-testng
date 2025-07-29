@@ -1,56 +1,37 @@
 package webdriver;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver; // ✅ Thêm dòng này
-import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.Test;
-
-import java.time.Duration;
 
 public class Topic_01_Check_Environment {
     WebDriver driver;
-    String projectPath = System.getProperty("user.dir");
-    String osName = System.getProperty("os.name");
 
-    @BeforeClass
-    public void beforeClass() {
-        if (osName.contains("Windows")) {
-            System.setProperty("webdriver.chrome.driver", projectPath + "\\browserDrivers\\chromedriver.exe");
-        } else {
-            System.setProperty("webdriver.chrome.driver", projectPath + "/browserDrivers/chromedriver");
-        }
-
-        driver = new ChromeDriver(); // ✅ Sử dụng đúng driver
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
-        driver.manage().window().maximize();
+    @Test
+    public void TC_01_Run_On_Firefox() {
+        driver = new FirefoxDriver();
         driver.get("https://www.facebook.com/");
-    }
-
-    @Test
-    public void TC_01_Url() {
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.facebook.com/");
-    }
-
-    @Test
-    public void TC_02_Logo() {
-        Assert.assertTrue(driver.findElement(By.cssSelector("img.fb_logo")).isDisplayed());
-    }
-
-    @Test
-    public void TC_03_Form() {
-        Assert.assertTrue(driver.findElement(By.xpath("//form[@data-testid='royal_login_form']")).isDisplayed());
-    }
-
-    @Test
-    public void TC_04_Form(){
-        //add comment
-    }
-
-    @AfterClass
-    public void afterClass() {
         driver.quit();
     }
+
+    @Test
+    public void TC_02_Run_On_Chrome() {
+        driver = new ChromeDriver();
+        driver.get("https://www.facebook.com/");
+        driver.quit();
+    }
+
+    @Test
+    public void TC_03_Run_On_Edge() {
+        String projectPath = System.getProperty("user.dir");
+        String driverPath = projectPath + "\\webdriver\\edgedriver_win64\\msedgedriver.exe";
+        System.setProperty("webdriver.edge.driver", driverPath);
+
+        driver = new EdgeDriver();
+        driver.get("https://www.facebook.com/");
+        driver.quit();
+    }
+
 }
